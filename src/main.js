@@ -40,8 +40,11 @@ document.addEventListener('keydown', function(e) {
     if (state.activeTool) { selectTool(state.activeTool); return; }
   }
   
-  // Delete / Backspace works with or without a modifier
-  if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); doEraseSelected(); return; }
+// Delete / Backspace works with or without a modifier, but not when typing in an input
+  const tag = document.activeElement?.tagName;
+  if ((e.key === 'Delete' || e.key === 'Backspace') && tag !== 'INPUT' && tag !== 'TEXTAREA') {
+    e.preventDefault(); doEraseSelected(); return;
+  }
   
   const isMac = navigator.platform.toUpperCase().includes('MAC');
   const mod   = isMac ? e.metaKey : e.ctrlKey;
