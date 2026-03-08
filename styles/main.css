@@ -390,20 +390,20 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.18);
+  background: white;
+  border: 1px solid var(--border);
   border-radius: 4px;
   padding: 3px 8px 3px 5px;
   cursor: pointer;
-  color: rgba(247,243,236,0.85);
+  color: var(--ink2);
   transition: all .12s;
   height: 26px;
 }
-.color-btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.35); }
-.color-btn.active { border-color: var(--gold); background: rgba(184,136,46,0.15); }
+.color-btn:hover { background: var(--cream); border-color: var(--ink); }
+.color-btn.active { border-color: var(--gold); background: rgba(184,136,46,0.08); color: var(--ink); }
 #ind-color {
   width: 14px; height: 14px; border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.4);
+  border: 2px solid var(--border);
   background: #b01217;
   flex-shrink: 0;
 }
