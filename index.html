@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smocking Plate Designer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Mono:wght@400;500&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+
+<!-- ── Title bar ── -->
+<div class="titlebar">
+  <h1>Smocking Plate Designer</h1>
+  <span class="titlebar-sub">English Smocking</span>
+  <input type="text" id="plate-title" placeholder="Untitled Design" value="My Smocking Plate">
+</div>
+
+<!-- ── Menu bar ── -->
+<div class="menubar" id="menubar">
+
+  <!-- FILE menu -->
+  <div class="menu-trigger" id="mt-file">
+    <button onclick="toggleMenu('mt-file')">File <span class="caret">▼</span></button>
+    <div class="menu-dropdown" style="min-width:220px">
+      <div class="dd-section-label">Browser Cache</div>
+      <button class="stitch-item" onclick="openSaveModal(); closeAllMenus()"><span class="stitch-dot"></span> Save to Cache</button>
+      <button class="stitch-item" onclick="openLoadModal(); closeAllMenus()"><span class="stitch-dot"></span> Load from Cache</button>
+      <div class="dd-sep"></div>
+      <div class="dd-section-label">File</div>
+      <button class="stitch-item" onclick="exportJSON(); closeAllMenus()"><span class="stitch-dot"></span> Save JSON <span style="opacity:.5;margin-left:auto;font-size:.6rem">⌘S</span></button>
+      <button class="stitch-item" onclick="importJSON(); closeAllMenus()"><span class="stitch-dot"></span> Load JSON</button>
+      <input type="file" id="imp-input" accept=".json" style="display:none" onchange="handleImport(event)">
+      <div class="dd-sep"></div>
+      <div class="dd-section-label">Print & Export</div>
+      <button class="stitch-item" onclick="doPrint(); closeAllMenus()"><span class="stitch-dot"></span> Print / PDF</button>
+      <button class="stitch-item" onclick="doPNG(); closeAllMenus()"><span class="stitch-dot"></span> Download PNG</button>
+    </div>
+  </div>
+
+  <!-- EDIT menu -->
+  <div class="menu-trigger" id="mt-edit">
+    <button onclick="toggleMenu('mt-edit')">Edit <span class="caret">▼</span></button>
+    <div class="menu-dropdown" style="min-width:220px">
+      <div class="dd-section-label">Selection</div>
+      <button class="stitch-item" id="tool-select" onclick="selectTool('select'); closeAllMenus()"><span class="stitch-dot"></span> Select <span style="opacity:.5;margin-left:auto;font-size:.6rem">drag / ⌘+click</span></button>
+      <button class="stitch-item" onclick="doSelectAll(); closeAllMenus()"><span class="stitch-dot"></span> Select All <span style="opacity:.5;margin-left:auto;font-size:.6rem">⌘A</span></button>
+      <div class="dd-sep"></div>
+      <div class="dd-section-label">Copy & Paste</div>
+      <button class="stitch-item" id="btn-copy" onclick="doCopy(); closeAllMenus()"><span class="stitch-dot"></span> Copy <span style="opacity:.5;margin-left:auto;font-size:.6rem">⌘C</span></button>
+      <button class="stitch-item" id="btn-paste" onclick="startPaste(); closeAllMenus()"><span class="stitch-dot"></span> Paste <span style="opacity:.5;margin-left:auto;font-size:.6rem">⌘V</span></button>
+      <div class="dd-sep"></div>
+      <div class="dd-section-label">Erase</div>
+      <button class="stitch-item" id="tool-eraser" onclick="doEraseSelected(); closeAllMenus()"><span class="stitch-dot"></span> Erase Selected <span style="opacity:.5;margin-left:auto;font-size:.6rem">⌘X</span></button>
+      <div class="dd-sep"></div>
+      <button class="dd-btn dd-btn-danger" onclick="clearGrid(); closeAllMenus()">✕ Clear / Reset All</button>
+    </div>
+  </div>
+
+  <!-- STITCHES menu -->
+  <div class="menu-trigger" id="mt-stitches">
+    <button onclick="toggleMenu('mt-stitches')">Stitches <span class="caret">▼</span></button>
+    <div class="menu-dropdown" style="min-width:220px">
+      <div class="dd-section-label">Stitch Tools</div>
+      <button class="stitch-item" id="tool-up-cable"   onclick="selectTool('up-cable');   closeAllMenus()"><span class="stitch-dot"></span> Up Cable</button>
+      <button class="stitch-item" id="tool-down-cable" onclick="selectTool('down-cable'); closeAllMenus()"><span class="stitch-dot"></span> Down Cable</button>
+      <button class="stitch-item" id="tool-outline"    onclick="selectTool('outline');    closeAllMenus()"><span class="stitch-dot"></span> Outline</button>
+      <button class="stitch-item" id="tool-stem"       onclick="selectTool('stem');       closeAllMenus()"><span class="stitch-dot"></span> Stem</button>
+      <button class="stitch-item" id="tool-wave"       onclick="selectTool('wave');       closeAllMenus()"><span class="stitch-dot"></span> Wave</button>
+      <button class="stitch-item" id="tool-trellis"    onclick="selectTool('trellis');    closeAllMenus()"><span class="stitch-dot"></span> Trellis</button>
+      <div class="dd-trellis-row">
+        <span>Trellis steps:</span>
+        <input type="number" id="inp-trellis-steps" value="2" min="1" max="10">
+      </div>
+    </div>
+  </div>
+
+  <!-- GRID menu -->
+  <div class="menu-trigger" id="mt-grid">
+    <button onclick="toggleMenu('mt-grid')">Grid <span class="caret">▼</span></button>
+    <div class="menu-dropdown" style="min-width:240px">
+      <div class="dd-section-label">Grid Setup</div>
+      <div class="dd-fields">
+        <div class="dd-field">
+          <label>Pleats</label>
+          <input type="number" id="inp-pleats" value="100" min="4" max="200">
+        </div>
+        <div class="dd-field">
+          <label>Rows</label>
+          <input type="number" id="inp-rows" value="10" min="2" max="40">
+        </div>
+        <div class="dd-field">
+          <label>Pleat width</label>
+          <input type="number" id="inp-pw" value="8" min="8" max="40">
+        </div>
+        <div class="dd-field">
+          <label>Row height</label>
+          <input type="number" id="inp-rh" value="40" min="20" max="100">
+        </div>
+      </div>
+      <button class="dd-btn dd-btn-primary" onclick="buildGrid(); closeAllMenus();">Apply Grid</button>
+      <div class="dd-sep"></div>
+      <div class="dd-section-label">Display</div>
+      <div class="dd-toggles">
+        <button class="dd-toggle active" id="btn-centerline" onclick="toggleCenterline()">Centerline</button>
+        <button class="dd-toggle active" id="btn-top-holding" onclick="toggleHolding('top')">Top Hold</button>
+        <button class="dd-toggle active" id="btn-bot-holding" onclick="toggleHolding('bot')">Bot Hold</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-sep"></div>
+
+  <!-- Undo / Redo icon buttons -->
+  <button class="icon-btn" title="Undo (Ctrl+Z)" onclick="doUndo()">
+    <svg viewBox="0 0 24 24"><path d="M3 7h10a6 6 0 0 1 0 12H9"/><polyline points="3 3 3 7 7 7"/></svg>
+  </button>
+  <button class="icon-btn" title="Redo (Ctrl+Y)" onclick="doRedo()">
+    <svg viewBox="0 0 24 24"><path d="M21 7H11a6 6 0 0 0 0 12h4"/><polyline points="21 3 21 7 17 7"/></svg>
+  </button>
+
+  <div class="menu-sep"></div>
+
+  <!-- Copy / Paste icon buttons -->
+  <button class="icon-btn" id="icon-copy" title="Copy selection (⌘C)" onclick="doCopy()">
+    <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+  </button>
+  <button class="icon-btn" id="icon-paste" title="Paste (⌘V)" onclick="startPaste()">
+    <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+  </button>
+
+  <!-- Active tool + color indicator -->
+  <div class="indicator-strip">
+    <span class="ind-label">Tool:</span>
+    <span id="ind-tool">—</span>
+    <button class="color-btn" id="color-btn" title="Pick thread color" onclick="toggleColorPopover()">
+      <span id="ind-color"></span>
+      <span id="ind-dmc-name">DMC 304</span>
+      <svg viewBox="0 0 24 24" style="width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;opacity:.5;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </div>
+
+  <!-- Zoom controls -->
+  <div class="zoom-cluster">
+    <button class="zbtn" onclick="adjustZoom(-0.1)">−</button>
+    <span id="zoom-label" style="min-width:36px;text-align:center;font-family:'DM Mono',monospace;font-size:.63rem;color:var(--inkl)">100%</span>
+    <button class="zbtn" onclick="adjustZoom(+0.1)">+</button>
+    <button class="zbtn" onclick="resetZoom()" style="font-size:.6rem">Reset</button>
+  </div>
+
+</div>
+
+<!-- ── Floating DMC color popover ── -->
+<div id="color-popover" class="color-popover" style="display:none">
+  <div class="dd-section-label" style="padding-bottom:2px">DMC Thread Color</div>
+  <div class="dmc-search-row">
+    <input type="text" id="dmc-search" placeholder="Search number or name…" oninput="dmcSearch(this.value)">
+  </div>
+  <div class="dmc-selected-row">
+    <div id="dmc-sel-swatch"></div>
+    <span id="dmc-sel-label">DMC 304 — Medium Christmas Red</span>
+  </div>
+  <div class="dmc-grid-wrap">
+    <div class="dmc-grid" id="dmc-grid"></div>
+  </div>
+</div>
+
+<!-- ── Canvas area ── -->
+<div class="canvas-area" id="canvas-area">
+  <div id="plate-paper">
+    <canvas id="plate-canvas"></canvas>
+    <canvas id="label-canvas"></canvas>
+    <canvas id="preview-canvas"></canvas>
+  </div>
+</div>
+
+<!-- ── Status bar ── -->
+<div class="status">
+  <span id="stat-pleats">Pleats: 100</span>
+  <span id="stat-rows">Rows: 10</span>
+  <span id="stat-pw">Pleat width: 8 px</span>
+  <span id="stat-rh">Row height: 40 px</span>
+  <span id="stat-msg"></span>
+</div>
+
+<!-- ── Save Modal ── -->
+<div class="modal-bg" id="save-modal">
+  <div class="modal">
+    <h3>Save to Cache</h3>
+    <p style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--inkl);margin-bottom:12px;line-height:1.6;">⚠ Stored in browser cache only. Use <strong>Save JSON</strong> to keep a permanent file.</p>
+    <input type="text" id="save-name" placeholder="Design name...">
+    <div class="modal-btns">
+      <button class="btn btn-outline" onclick="closeSaveModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="commitSave()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Load Modal ── -->
+<div class="modal-bg" id="load-modal">
+  <div class="modal">
+    <h3>Load from Cache</h3>
+    <p style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--inkl);margin-bottom:12px;line-height:1.6;">⚠ These designs are stored in browser cache and may be lost if cache is cleared.</p>
+    <div class="saves-list" id="saves-list"></div>
+    <div class="modal-btns">
+      <button class="btn btn-outline" onclick="closeLoadModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
