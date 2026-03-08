@@ -39,7 +39,10 @@ document.addEventListener('keydown', function(e) {
     if (state.selectedStitches.length) { doClearSelection(); flashMsg('Selection cleared'); return; }
     if (state.activeTool) { selectTool(state.activeTool); return; }
   }
-
+  
+  // Delete / Backspace works with or without a modifier
+  if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); doEraseSelected(); return; }
+  
   const isMac = navigator.platform.toUpperCase().includes('MAC');
   const mod   = isMac ? e.metaKey : e.ctrlKey;
   if (!mod) return;
@@ -48,7 +51,6 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'c') { e.preventDefault(); doCopy(); }
   if (e.key === 'v') { e.preventDefault(); if (!isPasteMode()) startPaste(); }
   if (e.key === 'x') { e.preventDefault(); doEraseSelected(); }
-  if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); doEraseSelected(); }
   if (e.key === 'a') { e.preventDefault(); doSelectAll(); }
   if (e.key === 's') { e.preventDefault(); exportJSON(); }
 });
