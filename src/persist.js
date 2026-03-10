@@ -1,13 +1,13 @@
-// ─────────────────────────────────────────────
+// ----------------------------------------------------
 //  Save / Load (localStorage + JSON file)
-// ─────────────────────────────────────────────
+// ----------------------------------------------------
 import { G, state, clamp } from './state.js';
 import { redraw } from './grid.js';
 import { flashMsg, updateStatus } from './ui.js';
 
-// ─────────────────────────────────────────────
+// ----------------------------------------------------
 //  Serialize / Deserialize
-// ─────────────────────────────────────────────
+// ----------------------------------------------------
 export function serialize() {
   return {
     pleats: G.pleats, rows: G.rows, pleatW: G.pleatW, rowH: G.rowH,
@@ -28,67 +28,51 @@ export function deserialize(data) {
   redraw(); updateStatus();
 }
 
-// ─────────────────────────────────────────────
-//  Browser cache (localStorage)
-// ─────────────────────────────────────────────
+// ----------------------------------------------------
+//  Browser cache (localStorage) - kept for module compatibility
+// ----------------------------------------------------
 function getSaves() {
-  try { return JSON.parse(localStorage.getItem('smocking_saves') || '{}'); } catch { return {}; }
+  try { return JSON.parse(localStorage.getItem('smocking_saves') || '{}'); } catch (e) { return {}; }
 }
 function setSaves(obj) {
   localStorage.setItem('smocking_saves', JSON.stringify(obj));
 }
 
-export function openSaveModal() {
-  document.getElementById('save-name').value = document.getElementById('plate-title').value || 'My Design';
-  document.getElementById('save-modal').classList.add('open');
-}
-export function closeSaveModal() {
-  document.getElementById('save-modal').classList.remove('open');
-}
-export function commitSave() {
-  const name  = document.getElementById('save-name').value.trim() || 'Untitled';
-  const saves = getSaves();
-  saves[name] = { name, date: new Date().toLocaleString(), data: serialize() };
-  setSaves(saves); closeSaveModal(); flashMsg('Saved: ' + name);
-}
+export function openSaveModal() {}
+export function closeSaveModal() {}
+export function commitSave() {}
 
-export function openLoadModal() {
-  const saves = getSaves(), keys = Object.keys(saves);
-  const list = document.getElementById('saves-list');
-  list.innerHTML = !keys.length
-    ? '<div style="padding:12px;font-size:.78rem;color:#9a8a7a;text-align:center">No saved designs yet.</div>'
-    : keys.map(k => {
-        const s = saves[k], safe = k.replace(/'/g, "\\'");
-        return `<div class="save-item">
-          <div><div class="save-item-name">${k}</div><div class="save-item-date">${s.date || ''}</div></div>
-          <div class="save-item-btns">
-            <button class="lb" onclick="loadDesign('${safe}')">Load</button>
-            <button class="db" onclick="deleteDesign('${safe}')">Del</button>
-          </div>
-        </div>`;
-      }).join('');
-  document.getElementById('load-modal').classList.add('open');
-}
-export function closeLoadModal() {
-  document.getElementById('load-modal').classList.remove('open');
-}
-export function loadDesign(name) {
-  const saves = getSaves();
-  if (!saves[name]) return;
-  deserialize(saves[name].data); closeLoadModal(); flashMsg('Loaded: ' + name);
-}
+export function openLoadModal() {}
+export function closeLoadModal() {}
+export function loadDesign(name) {}
 export function deleteDesign(name) {
-  const saves = getSaves(); delete saves[name]; setSaves(saves); openLoadModal();
+  const saves = getSaves(); delete saves[name]; setSaves(saves);
 }
 
-// ─────────────────────────────────────────────
+// ----------------------------------------------------
 //  JSON file export / import
-// ─────────────────────────────────────────────
-export function exportJSON() {
+// ----------------------------------------------------
+export async function exportJSON() {
+  const title = document.getElementById('plate-title').value || 'smocking-plate';
   const blob = new Blob([JSON.stringify(serialize(), null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob), a = document.createElement('a');
-  a.href = url; a.download = (document.getElementById('plate-title').value || 'smocking-plate') + '.json';
-  a.click(); URL.revokeObjectURL(url); flashMsg('JSON saved');
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: title + '.json',
+        types: [{ description: 'JSON Design File', accept: { 'application/json': ['.json'] } }],
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      flashMsg('JSON saved');
+    } catch (e) {
+      if (e.name !== 'AbortError') flashMsg('Save failed');
+    }
+  } else {
+    const url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = title + '.json'; a.click();
+    URL.revokeObjectURL(url); flashMsg('JSON saved');
+  }
 }
 
 export function importJSON() {
@@ -100,14 +84,14 @@ export function handleImport(e) {
   const reader = new FileReader();
   reader.onload = ev => {
     try { deserialize(JSON.parse(ev.target.result)); flashMsg('Imported: ' + file.name); }
-    catch { flashMsg('Error: invalid JSON file'); }
+    catch (err) { flashMsg('Error: invalid JSON file'); }
   };
   reader.readAsText(file); e.target.value = '';
 }
 
-// ─────────────────────────────────────────────
+// ----------------------------------------------------
 //  Clear / Reset
-// ─────────────────────────────────────────────
+// ----------------------------------------------------
 export function clearGrid() {
   if (!confirm('Reset the grid to defaults and clear all stitches?')) return;
   G.pleats = 100; G.rows = 10; G.pleatW = 8; G.rowH = 40;

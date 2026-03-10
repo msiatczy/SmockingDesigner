@@ -40,9 +40,27 @@ export function doPrint() {
   win.document.close();
 }
 
-export function doPNG() {
+export async function doPNG() {
   const title = document.getElementById('plate-title').value || 'smocking-plate';
-  const a = document.createElement('a');
-  a.href = buildExportCanvas().toDataURL('image/png');
-  a.download = title + '.png'; a.click(); flashMsg('Downloaded PNG');
+  const canvas = buildExportCanvas();
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: title + '.png',
+        types: [{ description: 'PNG Image', accept: { 'image/png': ['.png'] } }],
+      });
+      canvas.toBlob(async (blob) => {
+        const writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        flashMsg('PNG saved');
+      }, 'image/png');
+    } catch (e) {
+      if (e.name !== 'AbortError') flashMsg('Save failed');
+    }
+  } else {
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = title + '.png'; a.click(); flashMsg('Downloaded PNG');
+  }
 }

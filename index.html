@@ -13,7 +13,7 @@
 <div class="titlebar">
   <h1>Smocking Plate Designer</h1>
   <span class="titlebar-sub">English Smocking</span>
-  <input type="text" id="plate-title" placeholder="Untitled Design" value="My Smocking Plate">
+  <input type="text" id="plate-title" placeholder="Untitled Design" value="">
 </div>
 
 <!-- ── Menu bar ── -->
@@ -23,13 +23,9 @@
   <div class="menu-trigger" id="mt-file">
     <button onclick="toggleMenu('mt-file')">File <span class="caret">▼</span></button>
     <div class="menu-dropdown" style="min-width:220px">
-      <div class="dd-section-label">Browser Cache</div>
-      <button class="stitch-item" onclick="openSaveModal(); closeAllMenus()"><span class="stitch-dot"></span> Save to Cache</button>
-      <button class="stitch-item" onclick="openLoadModal(); closeAllMenus()"><span class="stitch-dot"></span> Load from Cache</button>
-      <div class="dd-sep"></div>
-      <div class="dd-section-label">File</div>
-      <button class="stitch-item" onclick="exportJSON(); closeAllMenus()"><span class="stitch-dot"></span> Save JSON <span style="opacity:.5;margin-left:auto;font-size:.6rem">⌘S</span></button>
-      <button class="stitch-item" onclick="importJSON(); closeAllMenus()"><span class="stitch-dot"></span> Load JSON</button>
+      <div class="dd-section-label">File Options</div>
+      <button class="stitch-item" onclick="exportJSON(); closeAllMenus()"><span class="stitch-dot"></span> Save file as JSON <span style="opacity:.5;margin-left:auto;font-size:.6rem">⌘S</span></button>
+      <button class="stitch-item" onclick="importJSON(); closeAllMenus()"><span class="stitch-dot"></span> Open JSON file</button>
       <input type="file" id="imp-input" accept=".json" style="display:none" onchange="handleImport(event)">
       <div class="dd-sep"></div>
       <div class="dd-section-label">Print & Export</div>
@@ -121,7 +117,7 @@
 
   <div class="menu-sep"></div>
 
-  <!-- Copy / Paste icon buttons -->
+  <!-- Copy icon button -->
   <button class="icon-btn" id="icon-copy" title="Copy selection (⌘C)" onclick="doCopy()">
     <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
   </button>
@@ -180,30 +176,6 @@
   <span id="stat-msg"></span>
 </div>
 
-<!-- ── Save Modal ── -->
-<div class="modal-bg" id="save-modal">
-  <div class="modal">
-    <h3>Save to Cache</h3>
-    <p style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--inkl);margin-bottom:12px;line-height:1.6;">⚠ Stored in browser cache only. Use <strong>Save JSON</strong> to keep a permanent file.</p>
-    <input type="text" id="save-name" placeholder="Design name...">
-    <div class="modal-btns">
-      <button class="btn btn-outline" onclick="closeSaveModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="commitSave()">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── Load Modal ── -->
-<div class="modal-bg" id="load-modal">
-  <div class="modal">
-    <h3>Load from Cache</h3>
-    <p style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--inkl);margin-bottom:12px;line-height:1.6;">⚠ These designs are stored in browser cache and may be lost if cache is cleared.</p>
-    <div class="saves-list" id="saves-list"></div>
-    <div class="modal-btns">
-      <button class="btn btn-outline" onclick="closeLoadModal()">Close</button>
-    </div>
-  </div>
-</div>
 
 <script type="module" src="/src/main.js"></script>
 </body>
