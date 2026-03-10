@@ -84,11 +84,27 @@ export function deleteDesign(name) {
 // ─────────────────────────────────────────────
 //  JSON file export / import
 // ─────────────────────────────────────────────
-export function exportJSON() {
+export async function exportJSON() {
+  const title = document.getElementById('plate-title').value || 'smocking-plate';
   const blob = new Blob([JSON.stringify(serialize(), null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob), a = document.createElement('a');
-  a.href = url; a.download = (document.getElementById('plate-title').value || 'smocking-plate') + '.json';
-  a.click(); URL.revokeObjectURL(url); flashMsg('JSON saved');
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: title + '.json',
+        types: [{ description: 'JSON Design File', accept: { 'application/json': ['.json'] } }],
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      flashMsg('JSON saved');
+    } catch (e) {
+      if (e.name !== 'AbortError') flashMsg('Save failed');
+    }
+  } else {
+    const url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = title + '.json'; a.click();
+    URL.revokeObjectURL(url); flashMsg('JSON saved');
+  }
 }
 
 export function importJSON() {
