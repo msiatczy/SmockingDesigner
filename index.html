@@ -13,7 +13,7 @@
 <div class="titlebar">
   <h1>Smocking Plate Designer</h1>
   <span class="titlebar-sub">English Smocking</span>
-  <input type="text" id="plate-title" placeholder="Untitled Design" value="My Smocking Plate">
+  <input type="text" id="plate-title" placeholder="Untitled Design" value="">
 </div>
 
 <!-- ── Menu bar ── -->
@@ -23,8 +23,9 @@
   <div class="menu-trigger" id="mt-file">
     <button onclick="toggleMenu('mt-file')">File <span class="caret">▼</span></button>
     <div class="menu-dropdown" style="min-width:220px">
-      <button class="stitch-item" onclick="exportJSON(); closeAllMenus()"><span class="stitch-dot"></span> Save JSON <span style="opacity:.5;margin-left:auto;font-size:.6rem">⌘S</span></button>
-      <button class="stitch-item" onclick="importJSON(); closeAllMenus()"><span class="stitch-dot"></span> Load JSON</button>
+      <div class="dd-section-label">File Options</div>
+      <button class="stitch-item" onclick="exportJSON(); closeAllMenus()"><span class="stitch-dot"></span> Save file as JSON <span style="opacity:.5;margin-left:auto;font-size:.6rem">⌘S</span></button>
+      <button class="stitch-item" onclick="importJSON(); closeAllMenus()"><span class="stitch-dot"></span> Open JSON file</button>
       <input type="file" id="imp-input" accept=".json" style="display:none" onchange="handleImport(event)">
       <div class="dd-sep"></div>
       <div class="dd-section-label">Print & Export</div>

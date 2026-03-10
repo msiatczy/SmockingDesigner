@@ -96,6 +96,8 @@ export async function exportJSON() {
       const writable = await handle.createWritable();
       await writable.write(blob);
       await writable.close();
+      const savedName = handle.name.replace(/\.json$/i, '');
+      document.getElementById('plate-title').value = savedName;
       flashMsg('JSON saved');
     } catch (e) {
       if (e.name !== 'AbortError') flashMsg('Save failed');
@@ -133,5 +135,3 @@ export function clearGrid() {
   document.getElementById('inp-pw').value      = G.pleatW;
   document.getElementById('inp-rh').value      = G.rowH;
   document.getElementById('plate-title').value = '';
-  redraw(); updateStatus(); flashMsg('Reset to defaults');
-}
