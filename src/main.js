@@ -17,11 +17,7 @@ import { doCopy, startPaste, doSelectAll, doEraseSelected, doClearSelection, isP
 import { selectTool }                      from './tools.js';
 import { initMouseEvents }                 from './tools.js';
 import { buildDMCGrid, pickDMC, dmcSearch, getActiveDMC } from './colors.js';
-import {
-  openSaveModal, closeSaveModal, commitSave,
-  openLoadModal, closeLoadModal, loadDesign, deleteDesign,
-  exportJSON, importJSON, handleImport, clearGrid,
-} from './persist.js';
+import { exportJSON, importJSON, handleImport, clearGrid } from './persist.js';
 import { doPrint, doPNG }                  from './export-utils.js';
 import {
   toggleMenu, closeAllMenus,
@@ -39,13 +35,13 @@ document.addEventListener('keydown', function(e) {
     if (state.selectedStitches.length) { doClearSelection(); flashMsg('Selection cleared'); return; }
     if (state.activeTool) { selectTool(state.activeTool); return; }
   }
-  
-// Delete / Backspace works with or without a modifier, but not when typing in an input
-  const tag = document.activeElement?.tagName;
+
+  // Delete / Backspace works with or without a modifier, but not when typing in an input
+  const tag = document.activeElement && document.activeElement.tagName;
   if ((e.key === 'Delete' || e.key === 'Backspace') && tag !== 'INPUT' && tag !== 'TEXTAREA') {
     e.preventDefault(); doEraseSelected(); return;
   }
-  
+
   const isMac = navigator.platform.toUpperCase().includes('MAC');
   const mod   = isMac ? e.metaKey : e.ctrlKey;
   if (!mod) return;
@@ -69,13 +65,6 @@ Object.assign(window, {
   toggleColorPopover,
 
   // File menu
-  openSaveModal,
-  closeSaveModal,
-  commitSave,
-  openLoadModal,
-  closeLoadModal,
-  loadDesign,
-  deleteDesign,
   exportJSON,
   importJSON,
   handleImport,
