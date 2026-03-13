@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────
 //  PNG and Print export
 // ─────────────────────────────────────────────
-import { G, totalRowLines, rowLineY, canvasW, canvasH } from './state.js';
+import { G, state, totalRowLines, rowLineY, canvasW, canvasH } from './state.js';
 import { plateCanvas } from './canvases.js';
 import { flashMsg } from './ui.js';
 
@@ -17,8 +17,11 @@ export function buildExportCanvas() {
   oc2.drawImage(plateCanvas, padL, padT);
   oc2.font = '600 10px monospace'; oc2.textAlign = 'center';
   for (let r = 0; r < totalRowLines(); r++) {
+    const isTop = r === 0, isBot = r === totalRowLines() - 1;
+    if (isTop && !state.showTopHolding) continue;
+    if (isBot && !state.showBotHolding) continue;
     const y = rowLineY(r) + padT;
-    const holding = r === 0 || r === totalRowLines() - 1;
+    const holding = isTop || isBot;
     const label = holding ? 'H' : String(r);
     const bw = 20, bh = 14, bx = padL - bw - 4, by = y - bh / 2;
     oc2.fillStyle = '#fff'; oc2.fillRect(bx, by, bw, bh);
