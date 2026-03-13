@@ -24,8 +24,8 @@
     <button onclick="toggleMenu('mt-file')">File <span class="caret">▼</span></button>
     <div class="menu-dropdown" style="min-width:220px">
       <div class="dd-section-label">File Options</div>
-      <button class="stitch-item" onclick="exportJSON(); closeAllMenus()"><span class="stitch-dot"></span> Save file as JSON <span style="opacity:.5;margin-left:auto;font-size:.6rem">⌘S</span></button>
-      <button class="stitch-item" onclick="importJSON(); closeAllMenus()"><span class="stitch-dot"></span> Open JSON file</button>
+      <button class="stitch-item" onclick="exportJSON(); closeAllMenus()"><span class="stitch-dot"></span> Save file<span style="opacity:.5;margin-left:auto;font-size:.6rem">⌘S</span></button>
+      <button class="stitch-item" onclick="importJSON(); closeAllMenus()"><span class="stitch-dot"></span> Open file</button>
       <input type="file" id="imp-input" accept=".json" style="display:none" onchange="handleImport(event)">
       <div class="dd-sep"></div>
       <div class="dd-section-label">Print & Export</div>
