@@ -105,6 +105,11 @@
     </div>
   </div>
 
+  <!-- HELP menu -->
+  <div class="menu-trigger" id="mt-help">
+    <button onclick="openHelpModal(); closeAllMenus()">Help</button>
+  </div>
+
   <div class="menu-sep"></div>
 
   <!-- Undo / Redo icon buttons -->
@@ -176,6 +181,70 @@
   <span id="stat-msg"></span>
 </div>
 
+<!-- ── Help Modal ── -->
+<div class="modal-bg" id="help-modal">
+  <div class="modal modal-help">
+    <h3>Quick Reference</h3>
+
+    <div class="help-section">
+      <div class="dd-section-label">Stitch Tools</div>
+      <table class="help-table">
+        <tr>
+          <td class="help-tool">Up Cable</td>
+          <td>Joins two adjacent pleats with thread placed <em>above</em> the pleating row. Single click on a valley point.</td>
+        </tr>
+        <tr>
+          <td class="help-tool">Down Cable</td>
+          <td>Joins two adjacent pleats with thread placed <em>below</em> the pleating row. Single click on a valley point.</td>
+        </tr>
+        <tr>
+          <td class="help-tool">Outline</td>
+          <td>A cable-style stitch where the thread consistently stays above the pleating row. / stitch angle.  Single click on a valley point.</td>
+        </tr>
+        <tr>
+          <td class="help-tool">Stem</td>
+          <td>A cable-style stitch where the thread consistently stays below the pleating row. \ stitch angle.  Single click on a valley point.</td>
+        </tr>
+        <tr>
+          <td class="help-tool">Wave</td>
+          <td> <strong>Click once</strong> to set the start point, <strong>single click</strong> to place wave stitch only, <strong>double click</strong> to place wave and next cable.</td>
+        </tr>
+        <tr>
+          <td class="help-tool">Trellis</td>
+          <td> Adjust step count in the Stitches menu. <strong>Click once</strong> to set the start point, <strong>single click</strong> to place trellis stitches only, <strong>double click</strong> to place trellis stitches and next cable.</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="help-section">
+      <div class="dd-section-label">Keyboard Shortcuts</div>
+      <table class="help-table">
+        <tr><td class="help-tool"><span class="help-kbd">⌘S</span></td><td>Save file (as JSON)</td></tr>
+        <tr><td class="help-tool"><span class="help-kbd">⌘Z</span></td><td>Undo</td></tr>
+        <tr><td class="help-tool"><span class="help-kbd">⌘⇧Z</span> / <span class="help-kbd">⌘Y</span></td><td>Redo</td></tr>
+        <tr><td class="help-tool"><span class="help-kbd">⌘A</span></td><td>Select all stitches</td></tr>
+        <tr><td class="help-tool"><span class="help-kbd">⌘C</span></td><td>Copy selection</td></tr>
+        <tr><td class="help-tool"><span class="help-kbd">⌘V</span></td><td>Paste — then click canvas to place</td></tr>
+        <tr><td class="help-tool"><span class="help-kbd">⌘X</span> / <span class="help-kbd">Delete</span></td><td>Erase selected stitches</td></tr>
+        <tr><td class="help-tool"><span class="help-kbd">Esc</span></td><td>Cancel paste / clear selection</td></tr>
+      </table>
+    </div>
+
+    <div class="help-section">
+      <div class="dd-section-label">Grid Setup</div>
+      <table class="help-table">
+        <tr><td class="help-tool">Pleats</td><td>Number of pleat across the fabric width (4–200).</td></tr>
+        <tr><td class="help-tool">Rows</td><td>Number of pleating rows between the two holding rows (2–40).</td></tr>
+        <tr><td class="help-tool">Pleat width</td><td>Horizontal spacing between pleats in pixels. Larger values spread the design out.</td></tr>
+        <tr><td class="help-tool">Row height</td><td>Vertical spacing between pleating rows in pixels. Larger values increase the depth of each row.</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn btn-outline" onclick="closeHelpModal()">Close</button>
+    </div>
+  </div>
+</div>
 
 <script type="module" src="/src/main.js"></script>
 </body>

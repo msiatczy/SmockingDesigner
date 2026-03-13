@@ -19,6 +19,7 @@ import { initMouseEvents }                 from './tools.js';
 import { buildDMCGrid, pickDMC, dmcSearch, getActiveDMC } from './colors.js';
 import { exportJSON, importJSON, handleImport, clearGrid } from './persist.js';
 import { doPrint, doPNG }                  from './export-utils.js';
+import { openHelpModal, closeHelpModal }   from './help.js';
 import {
   toggleMenu, closeAllMenus,
   toggleColorPopover, closeColorPopover,
@@ -96,6 +97,10 @@ Object.assign(window, {
   // Zoom
   adjustZoom,
   resetZoom,
+
+  // Help
+  openHelpModal,
+  closeHelpModal,
 });
 
 // ─────────────────────────────────────────────

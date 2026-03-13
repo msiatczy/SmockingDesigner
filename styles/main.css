@@ -568,6 +568,49 @@ body {
 .btn-primary { background: var(--ink); color: var(--cream); }
 .btn-outline  { background: transparent; color: var(--ink); border-color: var(--border); }
 .btn-outline:hover { border-color: var(--ink); }
+
+/* ── Help modal ── */
+.modal-help {
+  width: 600px;
+  max-height: 82vh;
+  overflow-y: auto;
+}
+.help-section {
+  margin-bottom: 18px;
+}
+.help-section .dd-section-label {
+  margin-bottom: 6px;
+}
+.help-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .8rem;
+  line-height: 1.5;
+}
+.help-table tr:last-child td { border-bottom: none; }
+.help-table td {
+  padding: 5px 8px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+.help-tool {
+  font-family: 'DM Mono', monospace;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink2);
+  width: 140px;
+}
+.help-kbd {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: .7rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  line-height: 1.6;
+}
+
 .saves-list {
   max-height: 200px;
   overflow-y: auto;
